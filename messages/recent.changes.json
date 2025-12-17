@@ -1,0 +1,16 @@
+{
+  "summary": "Visualize recently modified metadata and generate package.xml",
+  "description": "Retrieves metadata changes from the org and displays them in a table.",
+  "examples": [
+    "<%= config.bin %> <%= command.id %> --target-org my-org --days 7",
+    "<%= config.bin %> <%= command.id %> --target-org my-org --types all",
+    "<%= config.bin %> <%= command.id %> --target-org my-org --mine"
+  ],
+  "flags": {
+    "target-org": "The org to connect to",
+    "days": "Number of days to look back",
+    "created": "Filter by created date instead of last modified date",
+    "types": "Comma-separated list of metadata types to check, or \"all\"",
+    "mine": "Only show changes made by the current user"
+  }
+}
