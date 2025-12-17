@@ -7,7 +7,7 @@ A Salesforce CLI plugin to visualize recently modified metadata in your org and 
 
 ## Description
 
-This plugin helps developers and admins quickly identify what has changed in a Salesforce organization within a specified timeframe. It displays a summary table of modified (or created) metadata components and generates a `package.xml` file in an `output` directory, which can be used to retrieve the changes using `sf project retrieve`.
+This plugin helps developers and admins quickly identify what has changed in a Salesforce organization within a specified timeframe. It displays a summary table of modified (or created) metadata components and generates a `package.xml` file (defaulting to the current directory), which can be used to retrieve the changes using `sf project retrieve`.
 
 ## Installation
 
@@ -32,6 +32,7 @@ sf recent changes -o <org-alias> [flags]
 | `--created` | `-c` | Filter by **Created Date** instead of **Last Modified Date**. | `false` |
 | `--types` | `-t` | Comma-separated list of metadata types to check (e.g., `CustomObject,Flow`), or `all` to check all available types in the org. | (Default list*) |
 | `--mine` | `-m` | Only show changes made by the current user. | `false` |
+| `--output-dir` | | Directory to save the generated `package.xml`. | `.` |
 | `--json` | | Format output as JSON. | |
 
 *> The default list includes: ApexClass, ApexTrigger, AuraDefinitionBundle, CustomField, CustomObject, CustomTab, FlexiPage, Flow, GlobalValueSet, Layout, LightningComponentBundle, ListView, QuickAction, RecordType, ValidationRule.*
@@ -72,12 +73,18 @@ Find components created (instead of modified) in the last 30 days:
 sf recent changes -o my-org --days 30 --created
 ```
 
+### Specify Output Directory
+Generate the `package.xml` in a specific folder:
+```bash
+sf recent changes -o my-org --output-dir ./manifests
+```
+
 ## Output
 
 1.  **Console Table**: Displays a grouped list of changed components with their age, date, and user.
-2.  **Manifest File**: Generates `output/new.xml` containing the `package.xml` structure for the found changes.
+2.  **Manifest File**: Generates `package.xml` (in the current directory or specified `output-dir`) containing the structure for the found changes.
 
 You can use the generated manifest to retrieve the metadata:
 ```bash
-sf project retrieve start -x output/new.xml -o my-org
+sf project retrieve start -x package.xml -o my-org
 ```

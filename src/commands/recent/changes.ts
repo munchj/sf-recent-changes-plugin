@@ -71,6 +71,10 @@ export default class Changes extends SfCommand<RecentChangesResult[]> {
       summary: 'Only show changes made by the current user',
       default: false,
     }),
+    'output-dir': Flags.string({
+      summary: 'Directory to save the generated package.xml',
+      default: '.',
+    }),
   };
 
   public async run(): Promise<RecentChangesResult[]> {
@@ -218,12 +222,13 @@ export default class Changes extends SfCommand<RecentChangesResult[]> {
 
       newManifest += `    <version>${conn.getApiVersion()}</version>\n</Package>\n`;
 
-      const outputDir = './output';
+      const outputDir = flags['output-dir'];
       if (!fs.existsSync(outputDir)) {
-        fs.mkdirSync(outputDir);
+        fs.mkdirSync(outputDir, { recursive: true });
       }
-      fs.writeFileSync(path.join(outputDir, 'new.xml'), newManifest);
-      this.log(`\nGenerated ${path.join(outputDir, 'new.xml')}`);
+      const outputPath = path.join(outputDir, 'package.xml');
+      fs.writeFileSync(outputPath, newManifest);
+      this.log(`\nGenerated ${outputPath}`);
     }
 
     return summary;
